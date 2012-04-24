@@ -51,9 +51,9 @@
 }
 </style>
 <div><input id="username" placeholder="enter your name" x-webkit-speech=""></div>
-<div><input id="input"  placeholder="you-chat-here" x-webkit-speech=""></div>
 <div id="box"></div>
 <div id="list"></div> 
+<div><input id="input"  placeholder="you-chat-here" x-webkit-speech=""></div>
 <div id="pubnub" pub-key="demo" sub-key="demo" style="position: absolute; top: -1000px; "></div>
 <script src="./PubNub  Blog Build Real Time Web Apps Easy_files/pubnub-3.1.min.js"></script>
 <script>(function(){
@@ -66,37 +66,46 @@ PUBNUB.subscribe({
         var type = text['type'];
         var info = text['info'];
         if(type=='msg')
-        box.innerHTML = "<div>"+text['name']+":::::::::::::::::::"+new Date().getTime()+text['type']+(''+text['info']).replace( /[<>]/g, '' ) + '<br/>'+"</div>" + box.innerHTML;
+        box.innerHTML = "<div>"+text['name']+" at "+text['time']+" say: "+"<br/>"+(''+text['info']).replace( /[<>]/g, '' ) + '<br/>'+"</div>" + box.innerHTML;
         else{
             if(jQuery.inArray(info, userlist)<0){
                 userlist.push(info);
-                list.innerHTML = "<div>" +"Welcome! "+ (''+text['info']).replace( /[<>]/g, '' ) + '<br/>' +"</div>"+ list.innerHTML ; }
+                box.innerHTML = "<div>" +"Welcome! "+ (''+text['info']).replace( /[<>]/g, '' ) + '<br/>' +"</div>"+ box.innerHTML ; 
+                list.innerHTML = "<div>" + (''+text['info']).replace( /[<>]/g, '' ) + '<br/>' +"</div>"+ list.innerHTML ; 
+            }
         }
     }
 });
 PUBNUB.bind( 'keyup', input, function(e) {
     
    if  ((e.keyCode || e.charCode)=== 13) 
-   {
+   {   var time = new Date();
+       var h = time.getHours();
+       var m = time.getMinutes(); 
+       var s = time.getSeconds();
        PUBNUB.publish({
         channel : channel, 
         message : {
             'type':  "msg",
             'info': input.value,
-            'name': username.value 
+            'name': username.value, 
+            'time': h+":"+m+":"+s
         }
        });
        $('#input').val("");
   }
 } );
 PUBNUB.bind( 'keyup', username, function(e) {
-    (e.keyCode || e.charCode) === 13 && PUBNUB.publish({
-        channel : channel, 
-        message : {
-            'type':  "add",
-            'info': username.value
-        }
-    });
+    if( (e.keyCode || e.charCode) === 13){
+        PUBNUB.publish({
+            channel : channel, 
+            message : {
+                'type':  "add",
+                'info': username.value
+             }
+         });
+         $("#username").remove();
+     }
 } );
 
 })();</script>
