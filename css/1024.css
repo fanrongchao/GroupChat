@@ -1,0 +1,22 @@
+body {
+	background-image: url(../img/wallpaper.jpg);
+}
+h1.logo {
+	color: #ffffff;
+	font-size: 3em;
+	line-height: 1;
+	margin-bottom: 0.5em;
+}
+h1.slogon {
+	color: #ffffff;
+	text-align: right;
+}
+h1.white {
+	color: #ffffff;
+}
+h2 {
+	color: #ffffff;
+}
+h3 {
+	color: #ffffff;
+}

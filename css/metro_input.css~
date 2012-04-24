@@ -1,0 +1,48 @@
+/* #Reset & Basics (Inspired by E. Meyers)
+ ================================================== */
+input.metro {
+	-moz-appearance: textfield;
+	-moz-binding: url("chrome://global/content/platformHTMLBindings.xml#inputFields");
+	-moz-user-select: text;
+	background-color: -moz-field;
+	cursor: text;
+	line-height: normal;
+	text-align: start;
+	text-indent: 0;
+	text-shadow: none;
+	text-transform: none;
+	word-spacing: normal;
+}
+input.metro:focus {
+	outline: none;
+}
+input::-moz-focus-inner {
+	border: 0;
+}
+
+input.metro[type="text"]{
+	margin: 5px;
+	width: 190px;
+	height: 40px;
+	font-family: ColaborateLightRegular, Arial, sans-serif;
+	font-size: 16pt;
+	border: 0;
+	color: #808080;
+	padding: 5px 10px;
+	letter-spacing: -2px;
+	line-height: 30px;
+	display: block;
+}
+input.metro2[type="text"]{
+	margin: 5px;
+	width: 190px;
+	height: 40px;
+	font-family: ColaborateLightRegular, Arial, sans-serif;
+	font-size: 16pt;
+	border: 0;
+	color: #808080;
+	padding: 5px 10px;
+	letter-spacing: -2px;
+	line-height: 30px;
+	display: block;
+}

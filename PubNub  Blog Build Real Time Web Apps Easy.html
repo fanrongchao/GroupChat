@@ -1,115 +1,133 @@
 
 
-<html><!-- Hey, let's be friends! twitter.com/pubnub --><head>    
-    <script type="text/javascript" src="./PubNub  Blog Build Real Time Web Apps Easy_files/jquery.min.js"></script>
-</head>
-<body class="blog/build-real-time-web-apps-easy blog/build-real-time-web-apps-easy" data-twttr-rendered="true">
+<html><!-- Hey, let's be friends! twitter.com/pubnub -->
+    <head>    
+        <script type="text/javascript" src="./PubNub  Blog Build Real Time Web Apps Easy_files/jquery.min.js"></script>
+        <link rel="stylesheet" href="css/blueprint/screen.css" type="text/css"  media="screen, projection" />
+        <link rel="stylesheet" href="css/blueprint/print.css" type="text/css"    media="print" />
+        <!--[if lt IE 8]>
+        <link rel="stylesheet" href="css/blueprint/ie.css" type="text/css" media="screen, projection"/>
+        <![endif]-->
 
-<h1>Easy Real-time Apps</h1>
-<div class="clear"></div>
+        <link rel="stylesheet" href="css/metro_input.css" type="text/css" media="screen, projection" />
+        <link rel="stylesheet" href="css/metro_menu.css" type="text/css" media="screen, projection" />
+        <link rel="stylesheet" href="css/1024.css" type="text/css" media="screen, projection" />
+    </head>
+    <body class="blog/build-real-time-web-apps-easy blog/build-real-time-web-apps-easy" data-twttr-rendered="true">
 
-<p>
-    Chat in <strong>10 lines of JavaScript</strong>.
-    Quickest way to write Real-time Apps on mobile and web.
-</p>
+        <h1>Easy Real-time Apps</h1>
+        <div class="clear"></div>
 
-<style>
-#list, #box, #input, #username {
-    padding: 10px;
-    margin: 10px;
-    width: 500px;
+        <p>
+        Chat in <strong>10 lines of JavaScript</strong>.
+        Quickest way to write Real-time Apps on mobile and web.
+        </p>
+        <div class="container">
 
-    text-shadow: #ccc -1px -1px 2px;
+            <div class="span-12 last">
+                <br/><br />
+                <h1 class="logo">Online Chat Room</h1>
+                <br/><br /><br/>
+            </div>
 
-    -webkit-border-radius: 4px;
-    -moz-border-radius: 4px;
-    -o-border-radius: 4px;
-    border-radius: 4px;
-
-    -webkit-box-shadow: inset 0 0 30px #eee;
-    -moz-box-shadow: inset 0 0 30px #eee;
-    -o-box-shadow: inset 0 0 30px #eee;
-    box-shadow: inset 0 0 30px #eee;
-}
-#box {
-    height: 100px;
-    overflow: scroll;
-    overflow-x: hidden;
-    border: 1px solid #888;
-    background: #f8f8f8 url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAZCAYAAADwkER/AAAAAXNSR0IArs4c6QAAAAlwSFlzAAALEwAACxMBAJqcGAAAADdJREFUCNdVzDEOwCAUw9DX/Nv2/kMLRXQD4cFylsAd9KAtvcFz1p5bLfjWwQhGIYUrmMEsiIMfNxwSOsvoNw4AAAAASUVORK5CYII=') repeat-x;
-}
-#list {
-    height: 100px;
-    overflow: scroll;
-    overflow-x: hidden;
-    border: 1px solid #888;
-    background: #f8f8f8 url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAZCAYAAADwkER/AAAAAXNSR0IArs4c6QAAAAlwSFlzAAALEwAACxMBAJqcGAAAADdJREFUCNdVzDEOwCAUw9DX/Nv2/kMLRXQD4cFylsAd9KAtvcFz1p5bLfjWwQhGIYUrmMEsiIMfNxwSOsvoNw4AAAAASUVORK5CYII=') repeat-x;
-}
-#input ,#username{
-    font-size: 20px;
-    line-height: 20px;
-}
-</style>
-<div><input id="username" placeholder="enter your name" x-webkit-speech=""></div>
-<div id="box"></div>
-<div id="list"></div> 
-<div><input id="input"  placeholder="you-chat-here" x-webkit-speech=""></div>
-<div id="pubnub" pub-key="demo" sub-key="demo" style="position: absolute; top: -1000px; "></div>
-<script src="./PubNub  Blog Build Real Time Web Apps Easy_files/pubnub-3.1.min.js"></script>
-<script>(function(){
-var userlist = new Array();
-
-var box = PUBNUB.$('box'), input = PUBNUB.$('input'), channel = 'chat', username=PUBNUB.$('username'), list=PUBNUB.$('list');
-PUBNUB.subscribe({
-    channel  : channel,
-    callback : function(text) {
-        var type = text['type'];
-        var info = text['info'];
-        if(type=='msg')
-        box.innerHTML = "<div>"+text['name']+" at "+text['time']+" say: "+"<br/>"+(''+text['info']).replace( /[<>]/g, '' ) + '<br/>'+"</div>" + box.innerHTML;
-        else{
-            if(jQuery.inArray(info, userlist)<0){
-                userlist.push(info);
-                box.innerHTML = "<div>" +"Welcome! "+ (''+text['info']).replace( /[<>]/g, '' ) + '<br/>' +"</div>"+ box.innerHTML ; 
-                list.innerHTML = "<div>" + (''+text['info']).replace( /[<>]/g, '' ) + '<br/>' +"</div>"+ list.innerHTML ; 
-            }
-        }
-    }
-});
-PUBNUB.bind( 'keyup', input, function(e) {
-    
-   if  ((e.keyCode || e.charCode)=== 13) 
-   {   var time = new Date();
-       var h = time.getHours();
-       var m = time.getMinutes(); 
-       var s = time.getSeconds();
-       PUBNUB.publish({
-        channel : channel, 
-        message : {
-            'type':  "msg",
-            'info': input.value,
-            'name': username.value, 
-            'time': h+":"+m+":"+s
-        }
-       });
-       $('#input').val("");
-  }
-} );
-PUBNUB.bind( 'keyup', username, function(e) {
-    if( (e.keyCode || e.charCode) === 13){
-        PUBNUB.publish({
-            channel : channel, 
-            message : {
-                'type':  "add",
-                'info': username.value
-             }
-         });
-         $("#username").remove();
-     }
-} );
-
-})();</script>
+            <div class="span-16">
+                <div>
+                        <input id="input" class="metro2" type="text" placeholder="Say something" />
+                        </div>
+                        <ul id="box" class="metro">
+                        </ul>   
+                        </div>
 
 
+                    <div class="span-8 last">
+                        <div>
+                            <form name="newuser" action="#" method="POST">
+                                <input path="username"
+                                class="metro" type="text"
+                                placeholder="Your
+                                Name"
+                                />
+                                <form>
+                                </div>
+                                <ul
+                                    class="metro">
+                                    <li
+                                    class="box-s3
+                                    rotate360
+                                    dw">            
+                                    <a
+                                        class="box"
+                                        href="#">
+                                        <span>User1</span>
+                                        <img
+                                        src="img/icons/star.png"
+                                        alt=""> 
+                                    </a>        
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
 
-</body></html>
+                        <div><input id="username" placeholder="enter your name" x-webkit-speech=""></div>
+                        <div id="box"></div>
+                        <div id="list"></div> 
+                        <div><input id="input"  placeholder="you-chat-here" x-webkit-speech=""></div>
+                        <div id="pubnub" pub-key="demo" sub-key="demo" style="position: absolute; top: -1000px; "></div>
+                        <script src="./PubNub  Blog Build Real Time Web Apps Easy_files/pubnub-3.1.min.js"></script>
+                        <script>(function(){
+                            var userlist = new Array();
+
+                            var box = PUBNUB.$('box'), input = PUBNUB.$('input'), channel = 'chat', username=PUBNUB.$('username'), list=PUBNUB.$('list');
+                            PUBNUB.subscribe({
+                                channel  : channel,
+                                callback : function(text) {
+                                    var type = text['type'];
+                                    var info = text['info'];
+                                    if(type=='msg')
+                                    box.innerHTML ="<li class=\"box-s4 rotate360 dw\"><a class=\"box\" ><span>"+text['name']+" at "+text['time']+" say: "+"<br/>"+(''+text['info']).replace( /[<>]/g, '' ) + '<br/>' +"</span> </a></li>"+ box.innerHTML;
+                                    else{
+                                        if(jQuery.inArray(info, userlist)<0){
+                                            userlist.push(info);
+                                            box.innerHTML ="<li class=\"box-s4 rotate360 dw\"><a class=\"box\" ><span>"+"Welcome !"+(''+text['info']).replace( /[<>]/g, '' ) + "</span> </a></li>"+ box.innerHTML;
+                                            list.innerHTML = "<div>" + (''+text['info']).replace( /[<>]/g, '' ) + '<br/>' +"</div>"+ list.innerHTML ; 
+                                        }
+                                    }
+                                }
+                            });
+                            PUBNUB.bind( 'keyup', input, function(e) {
+
+                                if  ((e.keyCode || e.charCode)=== 13) 
+                                {   var time = new Date();
+                                    var h = time.getHours();
+                                    var m = time.getMinutes(); 
+                                    var s = time.getSeconds();
+                                    PUBNUB.publish({
+                                        channel : channel, 
+                                        message : {
+                                            'type':  "msg",
+                                            'info': input.value,
+                                            'name': username.value, 
+                                            'time': h+":"+m+":"+s
+                                        }
+                                    });
+                                    $('#input').val("");
+                                }
+                            } );
+                            PUBNUB.bind( 'keyup', username, function(e) {
+                                if( (e.keyCode || e.charCode) === 13){
+                                    PUBNUB.publish({
+                                        channel : channel, 
+                                        message : {
+                                            'type':  "add",
+                                            'info': username.value
+                                        }
+                                    });
+                                    $("#username").remove();
+                                }
+                            } );
+
+                            })();</script>
+
+
+
+                </body></html>
