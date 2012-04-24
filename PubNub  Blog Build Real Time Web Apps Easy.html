@@ -66,23 +66,28 @@ PUBNUB.subscribe({
         var type = text['type'];
         var info = text['info'];
         if(type=='msg')
-        box.innerHTML = text['name']+":::::::::::::::::::"+new Date().getTime()+text['type']+(''+text['info']).replace( /[<>]/g, '' ) + '<br/>' + box.innerHTML;
+        box.innerHTML = "<div>"+text['name']+":::::::::::::::::::"+new Date().getTime()+text['type']+(''+text['info']).replace( /[<>]/g, '' ) + '<br/>'+"</div>" + box.innerHTML;
         else{
             if(jQuery.inArray(info, userlist)<0){
                 userlist.push(info);
-                list.innerHTML = (''+text['info']).replace( /[<>]/g, '' ) + '<br/>' + list.innerHTML; }
+                list.innerHTML = "<div>" +"Welcome! "+ (''+text['info']).replace( /[<>]/g, '' ) + '<br/>' +"</div>"+ list.innerHTML ; }
         }
     }
 });
 PUBNUB.bind( 'keyup', input, function(e) {
-    (e.keyCode || e.charCode) === 13 && PUBNUB.publish({
+    
+   if  ((e.keyCode || e.charCode)=== 13) 
+   {
+       PUBNUB.publish({
         channel : channel, 
         message : {
             'type':  "msg",
             'info': input.value,
             'name': username.value 
         }
-    });
+       });
+       $('#input').val("");
+  }
 } );
 PUBNUB.bind( 'keyup', username, function(e) {
     (e.keyCode || e.charCode) === 13 && PUBNUB.publish({
