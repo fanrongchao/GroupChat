@@ -14,7 +14,7 @@
 </p>
 
 <style>
-#box, #input {
+#list, #box, #input, #username {
     padding: 10px;
     margin: 10px;
     width: 500px;
@@ -38,26 +38,59 @@
     border: 1px solid #888;
     background: #f8f8f8 url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAZCAYAAADwkER/AAAAAXNSR0IArs4c6QAAAAlwSFlzAAALEwAACxMBAJqcGAAAADdJREFUCNdVzDEOwCAUw9DX/Nv2/kMLRXQD4cFylsAd9KAtvcFz1p5bLfjWwQhGIYUrmMEsiIMfNxwSOsvoNw4AAAAASUVORK5CYII=') repeat-x;
 }
-#input {
+#list {
+    height: 100px;
+    overflow: scroll;
+    overflow-x: hidden;
+    border: 1px solid #888;
+    background: #f8f8f8 url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAZCAYAAADwkER/AAAAAXNSR0IArs4c6QAAAAlwSFlzAAALEwAACxMBAJqcGAAAADdJREFUCNdVzDEOwCAUw9DX/Nv2/kMLRXQD4cFylsAd9KAtvcFz1p5bLfjWwQhGIYUrmMEsiIMfNxwSOsvoNw4AAAAASUVORK5CYII=') repeat-x;
+}
+#input ,#username{
     font-size: 20px;
     line-height: 20px;
 }
 </style>
-<div><input id="input" placeholder="you-chat-here" x-webkit-speech=""></div>
+<div><input id="username" placeholder="enter your name" x-webkit-speech=""></div>
+<div><input id="input"  placeholder="you-chat-here" x-webkit-speech=""></div>
 <div id="box"></div>
-
+<div id="list"></div> 
 <div id="pubnub" pub-key="demo" sub-key="demo" style="position: absolute; top: -1000px; "></div>
 <script src="./PubNub  Blog Build Real Time Web Apps Easy_files/pubnub-3.1.min.js"></script>
 <script>(function(){
+var userlist = new Array();
 
-var box = PUBNUB.$('box'), input = PUBNUB.$('input'), channel = 'chat';
+var box = PUBNUB.$('box'), input = PUBNUB.$('input'), channel = 'chat', username=PUBNUB.$('username'), list=PUBNUB.$('list');
 PUBNUB.subscribe({
     channel  : channel,
-    callback : function(text) { box.innerHTML = (''+text).replace( /[<>]/g, '' ) + '<br/>' + box.innerHTML; }
+    callback : function(text) {
+        var type = text['type'];
+        var info = text['info'];
+        if(type=='msg')
+        box.innerHTML = text['name']+":::::::::::::::::::"+new Date().getTime()+text['type']+(''+text['info']).replace( /[<>]/g, '' ) + '<br/>' + box.innerHTML;
+        else{
+            if(jQuery.inArray(info, userlist)<0){
+                userlist.push(info);
+                list.innerHTML = (''+text['info']).replace( /[<>]/g, '' ) + '<br/>' + list.innerHTML; }
+        }
+    }
 });
 PUBNUB.bind( 'keyup', input, function(e) {
     (e.keyCode || e.charCode) === 13 && PUBNUB.publish({
-        channel : channel, message : input.value, x : (input.value = '')
+        channel : channel, 
+        message : {
+            'type':  "msg",
+            'info': input.value,
+            'name': username.value 
+        }
+    });
+} );
+PUBNUB.bind( 'keyup', username, function(e) {
+    (e.keyCode || e.charCode) === 13 && PUBNUB.publish({
+        channel : channel, 
+        message : {
+            'type':  "add",
+            'info': username.value
+        }
     });
 } );
 
