@@ -34,6 +34,27 @@
         <div id="pubnub" pub-key="demo" sub-key="demo" style="position: absolute; top: -1000px; "></div>
         <script src="./PubNub  Blog Build Real Time Web Apps Easy_files/pubnub-3.1.min.js"></script>
         <script>(function(){
+            var msgStyle = new Array();
+            msgStyle[0] = "dw";
+            msgStyle[1] = "adobe";
+            msgStyle[2] = "ae";
+            msgStyle[3] = "ai";
+            msgStyle[4] = "dw";
+            msgStyle[5] = "br";
+            msgStyle[6] = "envato";
+            msgStyle[7] = "ad";
+            msgStyle[8] = "aj";
+            msgStyle[9] = "tf";
+            msgStyle[10] = "vh";
+            msgStyle[11] = "gr";
+            msgStyle[12] = "do";
+            msgStyle[13] = "cc";
+            msgStyle[14] = "pd";
+            msgStyle[15] = "tuts";
+            msgStyle[16] = "rr";
+            msgStyle[17] = "wb";
+            msgStyle[18] = "fb";
+            var imgStyle = new Array();
             var userlist = new Array();
             var box = PUBNUB.$('box'), input = PUBNUB.$('input'), channel = 'chat', username=PUBNUB.$('username'), list=PUBNUB.$('list');
             PUBNUB.subscribe({
@@ -41,11 +62,12 @@
                 callback : function(text) {
                     var type = text['type'];
                     var info = text['info'];
+                    var i = Math.floor(18*Math.random());
                     if(type=='msg'){
                         if(text['name']!="")
-                        box.innerHTML ="<li class=\"box-s4 rotate360 dw\"><a class=\"box\" ><span>"+text['name']+" at "+text['time']+" say: "+"<br/>"+(''+text['info']).replace( /[<>]/g, '' ) + '<br/>' +"</span> </a></li>"+ box.innerHTML;
+                        box.innerHTML ="<li class=\"box-s4 rotate360 " +msgStyle[i]+"\"><a class=\"box\" ><span>"+text['name']+" at "+text['time']+" say: "+"<br/>"+(''+text['info']).replace( /[<>]/g, '' ) + '<br/>' +"</span> </a></li>"+ box.innerHTML;
                         else  
-                        box.innerHTML ="<li class=\"box-s4 rotate360 dw\"><a class=\"box\" ><span>"+"Anonymous"+" at "+text['time']+" say: "+"<br/>"+(''+text['info']).replace( /[<>]/g, '' ) + '<br/>' +"</span> </a></li>"+ box.innerHTML;
+                        box.innerHTML ="<li class=\"box-s4 rotate360 " +msgStyle[i]+ "\"><a class=\"box\" ><span>"+"Anonymous"+" at "+text['time']+" say: "+"<br/>"+(''+text['info']).replace( /[<>]/g, '' ) + '<br/>' +"</span> </a></li>"+ box.innerHTML;
                     }
                     else{
                         if(jQuery.inArray(info, userlist)<0){
@@ -57,8 +79,8 @@
                                     'info': username.value
                                 }
                             });
-                            box.innerHTML ="<li class=\"box-s4 rotate360 dw\"><a class=\"box\" ><span>"+"Welcome !"+(''+text['info']).replace( /[<>]/g, '' ) + "</span> </a></li>"+ box.innerHTML;
-                            list.innerHTML ="<li class=\"box-s4 rotate360 dw\"><a class=\"box\" ><span>"+text['info']+"</span> </a></li>"+ list.innerHTML;
+                            box.innerHTML ="<li class=\"box-s4 rotate360 "+msgStyle[i]+"\"><a class=\"box\" ><span>"+"Welcome !"+(''+text['info']).replace( /[<>]/g, '' ) + "</span> </a></li>"+ box.innerHTML;
+                            list.innerHTML ="<li class=\"box-s3 rotate360 "+msgStyle[i]+"\"><a class=\"box\" ><span>"+text['info']+"</span><img src=\"img/icons/star.png\"/> </a></li>"+ list.innerHTML;
                         }
                     }
                 }
@@ -66,7 +88,8 @@
             PUBNUB.bind( 'keyup', input, function(e) {
 
                 if  ((e.keyCode || e.charCode)=== 13) 
-                {   var time = new Date();
+                {    
+                    var time = new Date();
                     var h = time.getHours();
                     var m = time.getMinutes(); 
                     var s = time.getSeconds();
@@ -84,6 +107,10 @@
             } );
             PUBNUB.bind( 'keyup', username, function(e) {
                 if( (e.keyCode || e.charCode) === 13){
+                    if(username.value==""){
+                        alert("user name can not be empty ;)");
+                        return;
+                    }
                     PUBNUB.publish({
                         channel : channel, 
                         message : {
@@ -96,7 +123,4 @@
             } );
 
             })();</script>
-
-
-
 </body></html>

@@ -19,6 +19,9 @@ ul.metro .cb {
 }
 
 /* Reset */
+span{
+    overflow: auto
+}
 ul.metro, ul.metro li, ul.metro a, ul.metro p, ul.metro img {
 	margin: 0;
 	padding: 0;
@@ -147,7 +150,7 @@ ul.metro li.box-s4 a.box {
 
 ul.metro li.box-s4 a.box span {
 	width: 510px;
-	bottom: 0px;
+	top: 10px;
 	font-size: 14px;
 	text-align: left;
 }
